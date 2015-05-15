@@ -62,7 +62,13 @@ Makefile*
 
 *.autosave
 
-#QtCtreator Qml
+# Possible build dirs:
+build*/
+release/
+*.Debug
+*.Release
+
+#QtCreator Qml
 *.qmlproject.user
 *.qmlproject.user.*
 

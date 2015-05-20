@@ -5,8 +5,4 @@ Discussion : [![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitte
 
 
 ###Configuration système requise
-- Qt 4.5.0 :
-  * pour Linux (possédant X11) [en .tar.gz](http://download.qt.io/archive/qt/4.5/qt-x11-opensource-src-4.5.0.tar.gz) ou [en .tar.bz2](http://download.qt.io/archive/qt/4.5/qt-x11-opensource-src-4.5.0.tar.bz2)
-  * [pour Windows](http://download.qt.io/archive/qt/4.5/qt-win-opensource-src-4.5.0.zip)
-  * pour Mac OS [en .tar.gz](http://download.qt.io/archive/qt/4.5/qt-mac-opensource-src-4.5.0.tar.gz) ou [en .tar.bz2](http://download.qt.io/archive/qt/4.5/qt-mac-opensource-src-4.5.0.tar.bz2) ou [en .dmg](http://download.qt.io/archive/qt/4.5/qt-mac-opensource-4.5.0.dmg)
-  * "universel" [en .zip](http://download.qt.io/archive/qt/4.5/qt-all-opensource-src-4.5.0.zip) ou [en .tar.gz](http://download.qt.io/archive/qt/4.5/qt-all-opensource-src-4.5.0.tar.gz) ou [en .tar.bz2](http://download.qt.io/archive/qt/4.5/qt-all-opensource-src-4.5.0.tar.bz2)
+- <img src=http://upload.wikimedia.org/wikipedia/commons/9/94/Qt_logo.svg width="50" height="50" alt="Logo Qt"></img> [Qt 5](http://download.qt.io/archive/online_installers/2.0/) :  choisir la version adaptée à votre système (rappel: x86 pour 32 bits et x64 pour 64 bits)

@@ -1,11 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include "QtCore"
-#include "QtGui"
-#include "apprendre.h"
-#include "aide.h"
-#include "test.h"
-#include <QPixmap>
+
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent), ui(new Ui::MainWindowClass)
 {

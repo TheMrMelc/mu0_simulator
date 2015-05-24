@@ -1,7 +1,8 @@
 #include "test.h"
 #include "ui_test.h"
-#include <QPixmap>
-#include <QPainter>
+#include <QString>
+#include <QFile>
+#include <QTextStream>
 
 int couner1 = 0;
 bool on1_off1 = true;

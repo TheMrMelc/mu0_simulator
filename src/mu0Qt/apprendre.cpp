@@ -1,8 +1,8 @@
 #include "apprendre.h"
 #include "ui_apprendre.h"
-#include "macirculation.h"
-#include <QPixmap>
-#include <QPainter>
+#include <QFile>
+#include <QString>
+#include <QTextStream>
 
 int couner = 0;
 bool on_off = true;

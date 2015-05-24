@@ -1,11 +1,11 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include <QtGui/QMainWindow>
-#include <QModelIndex>
+#include <QMainWindow>
 #include "apprendre.h"
 #include "test.h"
 #include "aide.h"
+
 namespace Ui
 {
     class MainWindowClass;

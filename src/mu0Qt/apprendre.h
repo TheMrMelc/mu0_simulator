@@ -1,9 +1,7 @@
 #ifndef APPRENDRE_H
 #define APPRENDRE_H
 
-#include <QtGui/QDialog>
-#include <QtCore>
-#include <QtGui>
+#include <QDialog>
 
 namespace Ui {
     class Apprendre;

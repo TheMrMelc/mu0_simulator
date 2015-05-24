@@ -1,11 +1,13 @@
 # -------------------------------------------------
 # Project created by QtCreator 2015-03-31T17:12:51
 # -------------------------------------------------
+QT       += core gui
 
-TARGET = Exemple
+greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
+
+TARGET = Mu0
 TEMPLATE = app
 SOURCES += main.cpp \
-#QT      += phonon \
     mainwindow.cpp \
     apprendre.cpp \
     test.cpp \
@@ -21,5 +23,5 @@ FORMS += mainwindow.ui \
     test.ui \
     aide.ui
 
-RESOURCES += img.qrc
+RESOURCES += schema.qrc
 

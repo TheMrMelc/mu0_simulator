@@ -1,8 +1,6 @@
 #include "aide.h"
 #include "ui_aide.h"
-#include <QPainter>
-#include <QPixmap>
-int on2_off2 = 0;
+
 Aide::Aide(QWidget *parent) :
     QDialog(parent),
     m_ui(new Ui::Aide)

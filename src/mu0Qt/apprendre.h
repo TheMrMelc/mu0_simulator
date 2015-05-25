@@ -14,17 +14,14 @@ public:
     explicit Apprendre(QWidget *parent = 0);
     virtual ~Apprendre();
 
-protected:
-    virtual void changeEvent(QEvent *e);
-
 private:
-    Ui::Apprendre *m_ui;
-    QGraphicsScene *scene;
-    QTimer *timer;
+    Ui::Apprendre *ui;
 
 private slots:
-    void on_pushButton_4_clicked();
     void on_pushButton_clicked();
+    void on_pushButton_2_clicked();
+    void on_pushButton_3_clicked();
+    void on_pushButton_4_clicked();
 };
 
 #endif // APPRENDRE_H

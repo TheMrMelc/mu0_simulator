@@ -1,8 +1,7 @@
 #ifndef AIDE_H
 #define AIDE_H
-#include <phonon/MediaObject>
-#include <phonon/MediaSource>
-#include <QtGui/QDialog>
+
+#include <QDialog>
 
 namespace Ui {
     class Aide;

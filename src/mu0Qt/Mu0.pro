@@ -11,17 +11,16 @@ SOURCES += main.cpp \
     mainwindow.cpp \
     apprendre.cpp \
     test.cpp \
-    aide.cpp \
-    macirculation.cpp
+    aide.cpp
+
 HEADERS += mainwindow.h \
     apprendre.h \
     test.h \
-    aide.h \
-    macirculation.h
-FORMS += mainwindow.ui \
-    apprendre.ui \
-    test.ui \
-    aide.ui
+    aide.h
+
+FORMS += ui/mainwindow.ui \
+    ui/apprendre.ui \
+    ui/test.ui \
+    ui/aide.ui
 
 RESOURCES += schema.qrc
-

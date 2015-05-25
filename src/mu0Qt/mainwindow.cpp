@@ -6,12 +6,17 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
     ui->pushButton->setText("Quitter");
-    ui->label_8->setPixmap(QPixmap(":/new/prefix1/mu0"));
+    ui->label->setPixmap(QPixmap(":/new/prefix1/mu0"));
 }
 
 MainWindow::~MainWindow()
 {
     delete ui;
+}
+
+void MainWindow::on_pushButton_clicked()
+{
+    QApplication::exit();
 }
 
 void MainWindow::on_actionApprendre_triggered()

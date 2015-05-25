@@ -12,17 +12,16 @@ class Test : public QDialog {
     Q_DISABLE_COPY(Test)
 public:
     explicit Test(QWidget *parent = 0);
+    //Note : explicit empeche une conversion de constructeur
+    //par le compilateur qui pourrait entrainer des bugs invisibles
     virtual ~Test();
 
-protected:
-    virtual void changeEvent(QEvent *e);
-
 private:
-    Ui::Test *m_ui;
+    Ui::Test *ui;
 
 private slots:
-    void on_pushButton_4_clicked();
-    void on_pushButton_3_clicked();
+    void on_pushButton_clicked();
+    void on_pushButton_2_clicked();
 };
 
 #endif // TEST_H

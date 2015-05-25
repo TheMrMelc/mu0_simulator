@@ -4,77 +4,40 @@
 #include <QFile>
 #include <QTextStream>
 
-int couner1 = 0;
-bool on1_off1 = true;
-
 Test::Test(QWidget *parent) :
     QDialog(parent),
-    m_ui(new Ui::Test)
+    ui(new Ui::Test)
 {
-    m_ui->setupUi(this);
-    m_ui->label->setPixmap(QPixmap(":new/prefix1/mu0"));
-    m_ui->pushButton_3->setText("Comprendre l'exécution");
-    m_ui->pushButton_4->setText("pause");
-    m_ui->pushButton->setText("Sauvarge votre code");
-    m_ui->pushButton_2->setText("Retour Menu");
-     m_ui->listWidget->addItem("LDA");
-    m_ui->listWidget->addItem("STO");
-    m_ui->listWidget->addItem("OR");
-    m_ui->listWidget->addItem("AND");
-    m_ui->listWidget->addItem("XOR");
-    m_ui->listWidget->addItem("ROL");
-    m_ui->listWidget->addItem("ROR");
-    m_ui->listWidget->addItem("LDR");
-    m_ui->listWidget->addItem("JGE");
-    m_ui->listWidget->addItem("GNE");
-    m_ui->listWidget->addItem("STP");
-    m_ui->listWidget->addItem("JMP");
-    m_ui->listWidget->addItem("LDI");
-    m_ui->listWidget->addItem("STI");
-    m_ui->listWidget->addItem("XPC");
+    ui->setupUi(this);
+    //Affichage du schema de cablage quand µP inactif
+    ui->label->setPixmap(QPixmap(":/new/prefix1/mu01"));
+
+    ui->pushButton->setText("Quitter"); //pour fermer le simulateur
+    ui->pushButton_2->setText("Exécuter");
+
+    //Partie gauche de la fenetre, pour le deroulement des instructions
+    ui->label_2->setText("Saisir Instruction");
+    ui->label_3->setText("Mon code saisi");
+
+    //-----------Remplissage du cadre d'instructions saisies--------
+    int n = 50;
+    for(int i = 0; i<n ; i++)
+    {
+        ui->listWidget->addItem(QString::number(i) + "instruction");
+    }
+    //--------Objectif purement demonstratif ===> A SUPPRIMER ENSUITE
 }
 
 Test::~Test()
 {
-    delete m_ui;
+    delete ui;
 }
 
-void Test::changeEvent(QEvent *e)
+void Apprendre::on_pushButton_clicked()
 {
-    switch (e->type()) {
-    case QEvent::LanguageChange:
-        m_ui->retranslateUi(this);
-        break;
-    default:
-        break;
-    }
+    QApplication::exit();
 }
 
-void Test::on_pushButton_3_clicked()
+void Apprendre::on_pushButton_2_clicked()
 {
-    on1_off1 = true;
-    while(on1_off1 == true){
-
-    QApplication::processEvents();
-    QPixmap ship(":/new/prefix1/mu0");
-    QPixmap rotate(ship.size());
-
-    QPainter p(&rotate);
-    p.setRenderHint(QPainter::Antialiasing);
-    p.setRenderHint(QPainter::SmoothPixmapTransform);
-    p.setRenderHint(QPainter::HighQualityAntialiasing);
-    p.translate(rotate.size().width() / 2, rotate.size().height() / 2);
-    p.rotate(couner1);
-    p.translate(-rotate.size().width() / 2, rotate.size().height() / 2);
-
-    p.drawPixmap(0, 0, ship);
-    p.end();
-    m_ui->label->setPixmap(rotate);
-    couner1++;
-}
-}
-
-void Test::on_pushButton_4_clicked()
-{
-    on1_off1 = false;
 }

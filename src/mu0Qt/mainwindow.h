@@ -8,7 +8,7 @@
 
 namespace Ui
 {
-    class MainWindowClass;
+    class MainWindow;
 }
 
 class MainWindow : public QMainWindow
@@ -22,7 +22,7 @@ public:
    ~MainWindow();
 
 private:
-    Ui::MainWindowClass *ui;
+    Ui::MainWindow *ui;
     Apprendre *apprendre;
     Test *test;
     Aide *aide;
@@ -30,7 +30,7 @@ private:
 private slots:
     void on_pushButton_clicked();
     void on_actionAide_triggered();
-    void on_actionTester_triggered();
+    void on_actionTest_triggered();
     void on_actionApprendre_triggered();
 };
 

@@ -2,11 +2,11 @@
 #include "ui_mainwindow.h"
 
 MainWindow::MainWindow(QWidget *parent)
-    : QMainWindow(parent), ui(new Ui::MainWindowClass)
+    : QMainWindow(parent), ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
     ui->pushButton->setText("Quitter");
-    ui->label->setPixmap(QPixmap(":/new/prefix1/mu0"));
+    ui->label_4->setPixmap(QPixmap(":/new/prefix1/mu0"));
 }
 
 MainWindow::~MainWindow()

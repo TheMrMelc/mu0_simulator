@@ -15,9 +15,11 @@ Apprendre::Apprendre(QWidget *parent) :
 
     ui->pushButton->setText("Quitter"); //pour fermer le simulateur
 
-    ui->pushButton_2->setText("Exécuter");
+    ui->pushButton_2->setText("Executer");
     ui->pushButton_3->setText("Sauvegarder");    //copie de la liste des instructions choisies pour reutilisation ulterieure
     ui->pushButton_4->setText("Restaurer Code Saisi");
+    ui->pushButton_5->setText("Executer mon code saisi"); //code saisi par utilisateur
+
 
     //Partie gauche de la fenetre, pour le deroulement des instructions
     ui->label_2->setText("Saisir Instruction");

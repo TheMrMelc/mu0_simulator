@@ -1,22 +1,29 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include "QtCore"
-#include "QtGui"
-#include "apprendre.h"
-#include "aide.h"
-#include "test.h"
-#include <QPixmap>
+
 MainWindow::MainWindow(QWidget *parent)
-    : QMainWindow(parent), ui(new Ui::MainWindowClass)
+    : QMainWindow(parent), ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
     ui->pushButton->setText("Quitter");
-    ui->label_8->setPixmap(QPixmap(":/new/prefix1/mu0"));
+
+    QPixmap schema_mu0=QPixmap(":/new/prefix1/mu0"); // chargement de l'image
+    // get label dimensions
+    int w = ui->label_4->width();
+    int h = ui->label_4->height();
+
+    // set a scaled pixmap to a w x h window keeping its aspect ratio
+    ui->label_4->setPixmap(schema_mu0.scaled(w,h,Qt::KeepAspectRatio));
 }
 
 MainWindow::~MainWindow()
 {
     delete ui;
+}
+
+void MainWindow::on_pushButton_clicked()
+{
+    QApplication::exit();
 }
 
 void MainWindow::on_actionApprendre_triggered()
@@ -25,7 +32,7 @@ void MainWindow::on_actionApprendre_triggered()
     apprendre->show();
 }
 
-void MainWindow::on_actionTester_triggered()
+void MainWindow::on_actionTest_triggered()
 {
     test = new Test(this);
     test->show();

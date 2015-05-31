@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/new/prefix1">
+        <file alias="mu0">images/mu0.png</file>
+        <file alias="mu01">images/mu01.png</file>
+    </qresource>
+</RCC>

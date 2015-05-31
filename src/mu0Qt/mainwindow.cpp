@@ -6,7 +6,14 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
     ui->pushButton->setText("Quitter");
-    ui->label_4->setPixmap(QPixmap(":/new/prefix1/mu0"));
+
+    QPixmap schema_mu0=QPixmap(":/new/prefix1/mu0"); // chargement de l'image
+    // get label dimensions
+    int w = ui->label_4->width();
+    int h = ui->label_4->height();
+
+    // set a scaled pixmap to a w x h window keeping its aspect ratio
+    ui->label_4->setPixmap(schema_mu0.scaled(w,h,Qt::KeepAspectRatio));
 }
 
 MainWindow::~MainWindow()

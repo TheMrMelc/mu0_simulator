@@ -41,3 +41,7 @@ void Test::on_pushButton_clicked()
 {
     QApplication::exit();
 }
+
+void Test::on_pushButton_2_clicked()
+{
+}

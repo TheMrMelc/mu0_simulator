@@ -25,7 +25,7 @@ void MainWindow::on_actionApprendre_triggered()
     apprendre->show();
 }
 
-void MainWindow::on_actionTester_triggered()
+void MainWindow::on_actionTest_triggered()
 {
     test = new Test(this);
     test->show();

@@ -24,21 +24,17 @@ Composant(nc, nombreEntree, nombreSortie,nv, sig, val, activite, busEntrant, bus
 
 
 Multiplexeur::~Multiplexeur() {
-	// TODO Auto-generated destructor stub
+
 }
 
 void Multiplexeur::fonction(void){
 
 	short int sig = this->getSignal();
 
-
-	// si on a deux entrées sur le multipleuxeur
 	if(entree.size()==2){
-		//si le signal est 0, on active l'entrée 0
 		if(sig==0){
 			setValeur(entree[0]);
 		}
-		// si le signal est 1 on sélectionne l'entrée 1
 		if(sig==1){
 			setValeur(entree[1]);
 		}

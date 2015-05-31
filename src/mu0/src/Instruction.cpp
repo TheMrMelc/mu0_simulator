@@ -18,22 +18,14 @@ Instruction::Instruction(Microprocesseur* mu0) : mip(mu0) {
 
 }
 
-
 Instruction::~Instruction() {
 
 }
-// Pour mes instructions, je dois normalement utiliser les multiplexeurs et les mettre comme parametres afin de respecter les schemas du TD3 de S5MIP page 9 -> Besoin d'�tre s�r que les propositions
-// conviennent
-
-//Modifier "actif" par "signal"
-//Créer une classe "Mémoire" en UML pour gérer la mémoire
-
-
-
 
 int Instruction::lda(short int addr, Registre* ACC , Registre* IR, Multiplexeur* muxA, Multiplexeur* muxC, Memoire* mem){	//Instruction OK
 
-
+	/*Reset de tous les signaux*/
+	resetSignaux();
 	/*Activation des signaux*/
 	ACC->setSignal(1);
 	mem->setSignal(1);
@@ -54,21 +46,21 @@ int Instruction::lda(short int addr, Registre* ACC , Registre* IR, Multiplexeur*
 	mem->setSignal(0);
 
 	//On accède à la mémoire en lecture
-	short int emplacementMem = mem->getValeurEmplacementMemoire(addr);
-	mem->getBus_sortant()[0]->setValeur(mem->getValeurEmplacementMemoire(addr));		//Attention j'ai juste mis directement mem-> ...	//On place dans le bus sortant de la memoire la valeur de la case memoire contenue à l'adresse addr
-	muxC->fonction();																	//On re aiguille le multiplexeur muxB sur sa 2ème entree
+	mem->getBus_sortant()[0]->setValeur(mem->getValeurEmplacementMemoire(addr));		//On place dans le bus sortant de la memoire la valeur de la case memoire contenue à l'adresse addr
+	muxC->fonction();																	//On re aiguille le multiplexeur muxC sur sa 2ème entree
 	ACC->getBus_entrant()[0]->setValeur(mem->getBus_sortant()[0]->getValeur());			//On place dans le bus sortant de ACC la valeur de ACC
 	ACC->setValeur(ACC->getBus_entrant()[0]->getValeur());								//On place finalement la valeur du bus sortant de la memoire dans ACC
 
-	printf("LDA : fin\n");
 	return 1;
 }
 
 int Instruction::sto(short int addr, Registre* ACC, Registre* IR, Multiplexeur* muxA, Memoire* mem, Porte* p){	//Instruction OK
 
+	/*Reset de tous les signaux*/
+	resetSignaux();
 	/*Activation des signaux*/
 	p->setSignal(1);
-	mem->setSignal(1);														//Memoire Accessible en écriture
+	mem->setSignal(1);
 	muxA->setSignal(3);
 
 
@@ -84,16 +76,15 @@ int Instruction::sto(short int addr, Registre* ACC, Registre* IR, Multiplexeur* 
 
 	/*Réalisation des transferts de données*/
 	ACC->getBus_sortant()[0]->setValeur(ACC->getValeur());
-	//std::cout<<"valeur de ACC dans le bus sortant"<<std::endl;
 	mem->setValeurEmplacementMemoire(addr,ACC->getBus_sortant()[0]->getValeur());		//On place la valeur contenue dans le bus sortant de ACC dans la memoire à l'adresse addr
-
-
 
 	return 1;
 }
 
 int Instruction::add(short int addr, Registre* ACC , Registre* IR, Multiplexeur* muxA, Multiplexeur* muxB, Multiplexeur* muxC, Memoire* mem, UAL* ual ){//Instruction OK
 
+	/*Reset de tous les signaux*/
+	resetSignaux();
 	/*Activation des signaux*/
 	ACC->setSignal(1);
 	mem->setSignal(1);
@@ -110,23 +101,17 @@ int Instruction::add(short int addr, Registre* ACC , Registre* IR, Multiplexeur*
 	}
 
 	/*Réalisation des transferts de données*/
-	mem->setSignal(0);																				//On donne Accès à la memoire en lecture
+	mem->setSignal(0);																				//On donne accès à la memoire en lecture
 	mem->getBus_sortant()[0]->setValeur(mem->getValeurEmplacementMemoire(addr));
-	std::cout<<"La valeur dans le bus de sortie de la memoire vaut"<<mem->getBus_sortant()[0]->getValeur()<<std::endl;
 	ual->getBus_entrant()[0]->setValeur(mem->getBus_sortant()[0]->getValeur());						//On place la valeur contenue dans le bus sortant de la memoire dans le 1er bus de l'ual
-	std::cout<<"La valeur dans le bus d'entree 0 de l'ual vaut"<<ual->getBus_entrant()[0]->getValeur()<<std::endl;
 	ACC->getBus_sortant()[0]->setValeur(ACC->getValeur());											//On place dans le bus sortant de ACC la valeur contenu dans ACC
-	std::cout<<"La valeur dans le bus de sortie de ACC"<<ACC->getBus_sortant()[0]->getValeur()<<std::endl;
 	ual->getBus_entrant()[1]->setValeur(ACC->getBus_sortant()[0]->getValeur());						//On place la valeur contenue dans le bus sortant de ACC dans le 2ème bus entrant de l'ual
-	std::cout<<"La valeur dans le bus d'entree 1 de l'ual vaut"<<ual->getBus_entrant()[1]->getValeur()<<std::endl;
 	ual->setSignal(2);																				//On place le bon code "aluf"
 	ual->fonction(ual->getBus_entrant()[0]->getValeur(),ual->getBus_entrant()[1]->getValeur());		//On réalise l'opération "add"
 	ual->getBus_sortant()[0]->setValeur(ual->getValeur());											//On place dans le bus sortant de l'ual la valeur de retour de l'opération "add"
-	std::cout<<"La valeur dans le bus de sortie de l'ual vaut"<<ual->getBus_sortant()[0]->getValeur()<<std::endl;
 	muxC->setSignal(1);
 	muxC->fonction();																				//On re aiguille le multiplexeur muxC sur sa 3ème entree
 	ACC->getBus_entrant()[0]->setValeur(ual->getBus_sortant()[0]->getValeur());						//On place la valeur contenu dans le bus sortant de l'ual dans le bus entrant de ACC
-	std::cout<<"La valeur dans le bus d'entree vaut"<<ACC->getBus_entrant()[0]->getValeur()<<std::endl;
 	ACC->setValeur(ACC->getBus_entrant()[0]->getValeur());											//On place finalement la valeur du bus entrant de ACC dans ACC
 
 
@@ -135,7 +120,8 @@ int Instruction::add(short int addr, Registre* ACC , Registre* IR, Multiplexeur*
 
 int Instruction::sub(short int addr, Registre* ACC , Registre* IR, Multiplexeur* muxA, Multiplexeur* muxB, Multiplexeur* muxC, Memoire* mem, UAL* ual ){//Instruction OK
 
-
+	/*Reset de tous les signaux*/
+	resetSignaux();
 	/*Activation des signaux*/
 	ACC->setSignal(1);
 	mem->setSignal(1);
@@ -145,7 +131,7 @@ int Instruction::sub(short int addr, Registre* ACC , Registre* IR, Multiplexeur*
 	/*Envoi du code operande situé dans le registre IR dans la memoire*/
 	//muxA->fonction(3);
 	for(unsigned int i=0;i < (mem->getEmplacement_memoire().size());i++){	//Remplissage de la memoire au fur et à mesure
-		if((mem->getEmplacement_memoire()[i])==0){					//Si un emplacement est vide
+		if((mem->getEmplacement_memoire()[i])==0){							//Si un emplacement est vide
 			mem->setValeurEmplacementMemoire(i,IR->getValeur());			//On le remplit et on sort de la boucle
 			break;
 		}
@@ -163,7 +149,7 @@ int Instruction::sub(short int addr, Registre* ACC , Registre* IR, Multiplexeur*
 	ual->fonction(ual->getBus_entrant()[1]->getValeur(),ual->getBus_entrant()[0]->getValeur());	//On réalise l'opération "sub"
 	ual->getBus_sortant()[0]->setValeur(ual->getValeur());							//On place dans le bus sortant de l'ual la valeur de retour de l'opération "add"
 	muxA->fonction();																//On re aiguille le multiplexeur muxB sur sa 3ème entree
-	ACC->getBus_entrant()[0]->setValeur(ual->getBus_sortant()[0]->getValeur());
+	ACC->getBus_entrant()[0]->setValeur(ual->getBus_sortant()[0]->getValeur());		//On place dans le bus entrant de ACC
 	ACC->setValeur(ACC->getBus_entrant()[0]->getValeur());							//On place finalement la valeur du bus entrant de ACC dans ACC
 
 
@@ -173,6 +159,8 @@ int Instruction::sub(short int addr, Registre* ACC , Registre* IR, Multiplexeur*
 
 int Instruction::jmp(short int addr,Registre* ACC, Registre* pc , Registre* IR, Multiplexeur* muxA, Multiplexeur* muxB, Multiplexeur* muxC, Memoire* mem, UAL* ual ){//Instruction OK ( juste vérifier le contenu de pc)
 
+	/*Reset de tous les signaux*/
+	resetSignaux();
 	/*Activation des signaux utiles*/
 	pc->setSignal(1);
 	mem->setSignal(1);
@@ -205,6 +193,8 @@ int Instruction::jmp(short int addr,Registre* ACC, Registre* pc , Registre* IR, 
 
 int Instruction::jne(short int addr, Registre* ACC, Registre* pc , Registre* IR, Multiplexeur* muxA, Multiplexeur* muxB, Multiplexeur* muxC, Memoire* mem, UAL* ual ){//Instruction ok (juste vérifier le contenu de pc)
 
+	/*Reset de tous les signaux*/
+	resetSignaux();
 	if(ACC->getValeur() != 0){
 
 	/*Activation des signaux*/
@@ -241,6 +231,10 @@ int Instruction::jne(short int addr, Registre* ACC, Registre* pc , Registre* IR,
 }
 
 int Instruction::jge(short int addr, Registre* ACC, Registre* pc , Registre* IR, Multiplexeur* muxA, Multiplexeur* muxB, Multiplexeur* muxC, Memoire* mem, UAL* ual){//Instruction OK
+
+	/*Reset de tous les signaux*/
+	resetSignaux();
+
 	if(ACC->getValeur() >= 0){
 
 	/*Activation des signaux*/
@@ -252,7 +246,7 @@ int Instruction::jge(short int addr, Registre* ACC, Registre* pc , Registre* IR,
 	/*Envoi du code operande situé dans le registre IR dans la memoire*/
 	muxA->fonction();
 	for(unsigned int i=0;i < (mem->getEmplacement_memoire().size());i++){	//Remplissage de la memoire au fur et à mesure
-		if((mem->getEmplacement_memoire()[i])==0){					//Si un emplacement est vide
+		if((mem->getEmplacement_memoire()[i])==0){							//Si un emplacement est vide
 			mem->setValeurEmplacementMemoire(i,IR->getValeur());			//On le remplit et on sort de la boucle
 			break;
 		}
@@ -282,13 +276,17 @@ int Instruction::jge(short int addr, Registre* ACC, Registre* pc , Registre* IR,
 }
 
 void Instruction::stp(void){
-	for(unsigned int i=0;i< mip->getComposant().size();i++){					//On parcourt tous les composants et on met leur signal à 0
+	for(unsigned int i=0;i< mip->getComposant().size();i++){					//On parcourt tous les composants et on met leur signal à 0 et leur valeur à 0
 		mip->getComposant()[i]->setSignal(0);
+		mip->getComposant()[i]->setValeur(0);
 	}
 }
 
 
 int Instruction::_and(short int addr, Registre* ACC, Registre* IR, Multiplexeur* muxA, Multiplexeur* muxB, Multiplexeur* muxC, Memoire* mem, UAL* ual){//Instruction OK
+
+	/*Reset de tous les signaux*/
+	resetSignaux();
 
 	/*Activation des signaux*/
 	ACC->setSignal(1);
@@ -298,9 +296,9 @@ int Instruction::_and(short int addr, Registre* ACC, Registre* IR, Multiplexeur*
 
 	/*Envoi du code operande situé dans le registre IR dans la memoire*/
 	muxA->fonction();
-	for(unsigned int i=0;i < (mem->getEmplacement_memoire().size());i++){	//Remplissage de la memoire au fur et à mesure
-		if((mem->getEmplacement_memoire()[i])==0){							//Si un emplacement est vide
-			mem->setValeurEmplacementMemoire(i,IR->getValeur());			//On le remplit et on sort de la boucle
+	for(unsigned int i=0;i < (mem->getEmplacement_memoire().size());i++){		//Remplissage de la memoire au fur et à mesure
+		if((mem->getEmplacement_memoire()[i])==0){								//Si un emplacement est vide
+			mem->setValeurEmplacementMemoire(i,IR->getValeur());				//On le remplit et on sort de la boucle
 			break;
 		}
 	}
@@ -309,26 +307,23 @@ int Instruction::_and(short int addr, Registre* ACC, Registre* IR, Multiplexeur*
 	muxC->setSignal(2);															//On re aiguille le multiplexeur muxC sur sa 2ème sortie
 	mem->setSignal(0);															//On donne accès à la memoire en lecture
 	mem->getBus_sortant()[0]->setValeur(mem->getValeurEmplacementMemoire(addr));//On place la valeur contenue dans la memoire à l'adresse addr dans le bus sortant de la memoire
-	std::cout<<"La valeur dans le bus de sortie de la memoire vaut"<<mem->getBus_sortant()[0]->getValeur()<<std::endl;
 	ual->getBus_entrant()[0]->setValeur(mem->getBus_sortant()[0]->getValeur());	//On place la valeur contenue dans le bus sortant de la memoire dans le 1er bus de l'ual
-	std::cout<<"La valeur dans le bus d'entree 0 de l'ual vaut"<<ual->getBus_entrant()[0]->getValeur()<<std::endl;
 	ACC->getBus_sortant()[0]->setValeur(ACC->getValeur());						//On place la valeur contenue dans ACC dans le bus sortant de ACC
-	std::cout<<"La valeur dans le bus de sortie de ACC"<<ACC->getBus_sortant()[0]->getValeur()<<std::endl;
 	ual->getBus_entrant()[1]->setValeur(ACC->getBus_sortant()[0]->getValeur());	//On place la valeur contenue dans le bus sortant de ACC dans le 2ème bus entrant de l'ual
-	std::cout<<"La valeur dans le bus d'entree 1 de l'ual vaut"<<ual->getBus_entrant()[1]->getValeur()<<std::endl;
 	ual->setSignal(5);															//On place le bon code "aluf"
 	ual->fonction(ual->getBus_entrant()[1]->getValeur(),ual->getBus_entrant()[0]->getValeur());	//On réalise l'opération "and"
 	ual->getBus_sortant()[0]->setValeur(ual->getValeur());						//On place dans le bus sortant de l'ual la valeur de retour de l'opération "add"
-	std::cout<<"La valeur dans le bus de sortie de l'ual vaut"<<ual->getBus_sortant()[0]->getValeur()<<std::endl;
 	muxB->fonction();															//On re aiguille le multiplexeur muxB sur sa 3ème entree
 	ACC->getBus_entrant()[0]->setValeur(ual->getBus_sortant()[0]->getValeur()); //On place dan sle bus entrant de ACC la valeur contenue dans le bus sortant de l'UAL
-	std::cout<<"La valeur dans le bus d'entree vaut"<<ACC->getBus_entrant()[0]->getValeur()<<std::endl;
 	ACC->setValeur(ACC->getBus_entrant()[0]->getValeur());						//On place finalement la valeur du bus entrant de ACC dans ACC
 
 	return 1;
 }
 
 int Instruction::_or(short int addr, Registre* ACC, Registre* IR,Multiplexeur* muxA, Multiplexeur* muxB, Multiplexeur* muxC, Memoire* mem, UAL* ual){//Instruction ok
+
+	/*Reset de tous les signaux*/
+	resetSignaux();
 
 	/*Activation des signaux*/
 	ACC->setSignal(1);
@@ -350,20 +345,14 @@ int Instruction::_or(short int addr, Registre* ACC, Registre* IR,Multiplexeur* m
 		muxC->setSignal(1);															//On re aiguille le multiplexeur muxC sur sa 2ème sortie
 		mem->setSignal(0);															//On donne accès à la memoire en lecture
 		mem->getBus_sortant()[0]->setValeur(mem->getValeurEmplacementMemoire(addr));//On place la valeur contenue dans la memoire à l'adresse addr dans le bus sortant de la memoire
-		std::cout<<"La valeur dans le bus de sortie de la memoire vaut "<<mem->getBus_sortant()[0]->getValeur()<<std::endl;
 		ual->getBus_entrant()[0]->setValeur(mem->getBus_sortant()[0]->getValeur());	//On place la valeur contenue dans le bus sortant de la memoire dans le 1er bus de l'ual
-		std::cout<<"La valeur dans le bus d'entree 0 de l'ual vaut "<<ual->getBus_entrant()[0]->getValeur()<<std::endl;
 		ACC->getBus_sortant()[0]->setValeur(ACC->getValeur());
-		std::cout<<"La valeur dans le bus de sortie de ACC "<<ACC->getBus_sortant()[0]->getValeur()<<std::endl;
 		ual->getBus_entrant()[1]->setValeur(ACC->getBus_sortant()[0]->getValeur());	//On place la valeur contenue dans le bus sortant de ACC dans le 2ème bus entrant de l'ual
-		std::cout<<"La valeur dans le bus d'entree 1 de l'ual vaut "<<ual->getBus_entrant()[1]->getValeur()<<std::endl;
 		ual->setSignal(4);															//On place le bon code "aluf"
 		ual->fonction(ual->getBus_entrant()[1]->getValeur(),ual->getBus_entrant()[0]->getValeur());		//On réalise l'opération "or"
 		ual->getBus_sortant()[0]->setValeur(ual->getValeur());						//On place dans le bus sortant de l'ual la valeur de retour de l'opération "add"
-		std::cout<<"La valeur dans le bus de sortie de l'ual vaut "<<ual->getBus_sortant()[0]->getValeur()<<std::endl;
 		muxB->fonction();															//On re aiguille le multiplexeur muxB sur sa 3ème entree
 		ACC->getBus_entrant()[0]->setValeur(ual->getBus_sortant()[0]->getValeur());	//On pace
-		std::cout<<"La valeur dans le bus d'entree vaut "<<ACC->getBus_entrant()[0]->getValeur()<<std::endl;
 		ACC->setValeur(ACC->getBus_entrant()[0]->getValeur());						//On place finalement la valeur du bus entrant de ACC dans ACC
 
 
@@ -372,6 +361,9 @@ int Instruction::_or(short int addr, Registre* ACC, Registre* IR,Multiplexeur* m
 }
 
 int Instruction::_xor(short int addr, Registre* ACC, Registre* IR, Multiplexeur* muxA, Multiplexeur* muxB, Multiplexeur* muxC, Memoire* mem, UAL* ual){//Instruction ok
+
+	/*Reset de tous les signaux*/
+	resetSignaux();
 	/*Activation des signaux*/
 	ACC->setSignal(1);
 	mem->setSignal(1);	//Memoire ACCessible en ecriture
@@ -392,20 +384,14 @@ int Instruction::_xor(short int addr, Registre* ACC, Registre* IR, Multiplexeur*
 		muxC->setSignal(2);															//On re aiguille le multiplexeur muxC sur sa 2ème sortie
 		mem->setSignal(0);															//On donne accès à la memoire en lecture
 		mem->getBus_sortant()[0]->setValeur(mem->getEmplacement_memoire()[addr]);	//On re aiguille le multiplexeur muxC sur sa 2ème sortie
-		std::cout<<"La valeur dans le bus de sortie de la memoire vaut "<<mem->getBus_sortant()[0]->getValeur()<<std::endl;
 		ual->getBus_entrant()[0]->setValeur(mem->getBus_sortant()[0]->getValeur());	//On place la valeur contenue dans le bus sortant de la memoire dans le 1er bus de l'ual
-		std::cout<<"La valeur dans le bus d'entree 0 de l'ual vaut "<<ual->getBus_entrant()[0]->getValeur()<<std::endl;
-		ACC->getBus_sortant()[0]->setValeur(ACC->getValeur());
-		std::cout<<"La valeur dans le bus de sortie de ACC "<<ACC->getBus_sortant()[0]->getValeur()<<std::endl;
+		ACC->getBus_sortant()[0]->setValeur(ACC->getValeur());						//On place dans le bus sortant de ACC la valeur de ACC
 		ual->getBus_entrant()[1]->setValeur(ACC->getBus_sortant()[0]->getValeur());	//On place la valeur contenue dans le bus sortant de ACC dans le 2ème bus entrant de l'ual
-		std::cout<<"La valeur dans le bus d'entree 1 de l'ual vaut "<<ual->getBus_entrant()[0]->getValeur()<<std::endl;
 		ual->setSignal(6);															//On place le bon code "aluf"
 		ual->fonction(ual->getBus_entrant()[1]->getValeur(),ual->getBus_entrant()[1]->getValeur());		//On réalise l'opération "xor"
 		ual->getBus_sortant()[0]->setValeur(ual->getValeur());						//On place dans le bus sortant de l'ual la valeur de retour de l'opération "add"
-		std::cout<<"La valeur dans le bus de sortie de l'ual vaut "<<ual->getBus_sortant()[0]->getValeur()<<std::endl;
 		muxB->fonction();															//On re aiguille le multiplexeur muxB sur sa 3ème entree
 		ACC->getBus_entrant()[0]->setValeur(ual->getBus_sortant()[0]->getValeur());	//On place la valeur du bus de sortie de l'ual dans le bus entrant de ACC
-		std::cout<<"La valeur dans le bus d'entree vaut "<<ACC->getBus_entrant()[0]->getValeur()<<std::endl;
 		ACC->setValeur(ACC->getBus_entrant()[0]->getValeur());						//On place finalement la valeur du bus entrant de ACC dans ACC
 
 
@@ -416,6 +402,8 @@ int Instruction::_xor(short int addr, Registre* ACC, Registre* IR, Multiplexeur*
 
 int Instruction::rol(short int addr, Registre* ACC, Registre* IR, Multiplexeur* muxA, Multiplexeur* muxB, Multiplexeur* muxC, Memoire* mem, UAL* ual){//Rotation à gauche à revoir
 
+	/*Reset de tous les signaux*/
+	resetSignaux();
 	/*Activation des signaux*/
 	ACC->setSignal(1);
 	mem->setSignal(1);	//Memoire accessible en ecriture
@@ -436,24 +424,19 @@ int Instruction::rol(short int addr, Registre* ACC, Registre* IR, Multiplexeur* 
 		muxC->setSignal(1);															//On re aiguille le multiplexeur muxC sur sa 2ème sortie
 		mem->setSignal(0);															//On donne ACCès à la memoire en lecture
 		mem->getBus_sortant()[0]->setValeur(mem->getEmplacement_memoire()[addr]);	//On re aiguille le multiplexeur muxC sur sa 2ème sortie
-		std::cout<<"La valeur dans le bus de sortie de la memoire vaut "<<mem->getBus_sortant()[0]->getValeur()<<std::endl;
 		ual->getBus_entrant()[0]->setValeur(mem->getBus_sortant()[0]->getValeur());	//On place la valeur contenue dans le bus sortant de la memoire dans le 1er bus de l'ual
-		std::cout<<"La valeur dans le bus d'entree 0 de l'ual vaut "<<ual->getBus_entrant()[0]->getValeur()<<std::endl;
 		ACC->getBus_sortant()[0]->setValeur(ACC->getValeur());
-		std::cout<<"La valeur dans le bus de sortie de ACC "<<ACC->getBus_sortant()[0]->getValeur()<<std::endl;
 		ual->getBus_entrant()[1]->setValeur(ACC->getBus_sortant()[0]->getValeur());	//On place la valeur contenue dans le bus sortant de ACC dans le 2ème bus entrant de l'ual
-		std::cout<<"La valeur dans le bus d'entree 1 de l'ual vaut "<<ual->getBus_entrant()[0]->getValeur()<<std::endl;
 		ual->setSignal(7);															//On place le bon code "aluf"
 
-		for(int i =0;i<mem->getEmplacement_memoire()[addr];i++){
-		ual->fonction(ual->getBus_entrant()[0]->getValeur(),ual->getBus_entrant()[1]->getValeur());		//On realise 'addr' fois l'opération "rol"
+		for(int i =0;i<mem->getValeurEmplacementMemoire(addr);i++){
+		short int tmp = ual->fonction(ual->getBus_entrant()[0]->getValeur(),ual->getBus_entrant()[1]->getValeur());		//On realise 'addr' fois l'opération "rol"
+		ual->fonction(tmp,ual->getBus_entrant()[1]->getValeur());
 		}
 
 		ual->getBus_sortant()[0]->setValeur(ual->getValeur());						//On place dans le bus sortant de l'ual la valeur de retour de l'opération "add"
-		std::cout<<"La valeur dans le bus de sortie de l'ual vaut "<<ual->getBus_sortant()[0]->getValeur()<<std::endl;
 		muxB->fonction();															//On re aiguille le multiplexeur muxB sur sa 3ème entree
 		ACC->getBus_entrant()[0]->setValeur(ual->getBus_sortant()[0]->getValeur());	//On pace
-		std::cout<<"La valeur dans le bus d'entree vaut "<<ACC->getBus_entrant()[0]->getValeur()<<std::endl;
 		ACC->setValeur(ACC->getBus_entrant()[0]->getValeur());						//On place finalement la valeur du bus entrant de ACC dans ACC
 
 
@@ -465,6 +448,8 @@ int Instruction::rol(short int addr, Registre* ACC, Registre* IR, Multiplexeur* 
 
 int Instruction::ldr(short int addr, Registre* ACC, Registre* r , Registre* IR, Multiplexeur* muxA, Multiplexeur* muxB, Multiplexeur* muxC, Memoire* mem, UAL* ual){//Instruction OK
 
+	/*Reset de tous les signaux*/
+	resetSignaux();
 	/*Activation des signaux*/
 	r->setSignal(1);
 	mem->setSignal(1);
@@ -503,6 +488,8 @@ int Instruction::ldr(short int addr, Registre* ACC, Registre* r , Registre* IR, 
 
 int Instruction::ldi(short int addr, Registre* ACC, Registre* r , Registre* IR, Multiplexeur* muxA, Multiplexeur* muxB, Multiplexeur* muxC, Memoire* mem, UAL* ual){//Instruction ok
 
+	/*Reset de tous les signaux*/
+	resetSignaux();
 	/*Activation des signaux*/
 	r->setSignal(1);
 	mem->setSignal(1);
@@ -525,10 +512,8 @@ int Instruction::ldi(short int addr, Registre* ACC, Registre* r , Registre* IR, 
 	//1ère phase
 	mem->setSignal(0);																		//On accède à la mémoire en lecture
 	mem->getBus_sortant()[0]->setValeur(mem->getValeurEmplacementMemoire(r->getValeur()));	//On place dans le bus sortant de la memoire la valeur de la case memoire contenue à l'adresse contenue dans r
-	std::cout<<"La valeur dans le bus de sortie de la memoire vaut "<<mem->getBus_sortant()[0]->getValeur()<<std::endl;
 	muxC->fonction();																		//On re-aiguille le multiplexeur muxC sur sa 2ème entree
 	ACC->getBus_entrant()[0]->setValeur(mem->getBus_sortant()[0]->getValeur());				//On place dans le bus entrant de ACC la valeur du bus sortant de la mem
-	std::cout<<"La valeur dans le bus d'entree de ACC vaut "<<ACC->getBus_entrant()[0]->getValeur()<<std::endl;
 	ACC->setValeur(ACC->getBus_entrant()[0]->getValeur());									//On place finalement la valeur du bus sortant de la memoire dans ACC
 
 	//2ème phase
@@ -537,17 +522,12 @@ int Instruction::ldi(short int addr, Registre* ACC, Registre* r , Registre* IR, 
 	muxA->fonction();
 	muxC->fonction();
 	r->getBus_sortant()[0]->setValeur(r->getValeur());							//On place la valeur contenue dans r vers le bus sortant de r
-	std::cout<<"La valeur dans le bus de sortie de R vaut "<<r->getBus_sortant()[0]->getValeur()<<std::endl;
 	ual->getBus_entrant()[0]->setValeur(r->getBus_sortant()[0]->getValeur());	//On place la valeur du bus sortant de r dans le 1er bus entrant de ual
-	std::cout<<"La valeur dans le 1er bus entrant de UAL vaut  "<<ual->getBus_entrant()[0]->getValeur()<<std::endl;
 	ACC->getBus_sortant()[0]->setValeur(ACC->getValeur());						//On place dans le bus sortant de ACC la valeur de ACC
-	std::cout<<"La valeur dans le bus de sortie de ACC vaut "<<ACC->getBus_sortant()[0]->getValeur()<<std::endl;
 	ual->getBus_entrant()[1]->setValeur(ACC->getBus_sortant()[0]->getValeur());	//On place la valeur contenue dans le bus sortant de ACC dans le 2ème bus entrant de l'ual
-	std::cout<<"La valeur dans le 2eme bus entrant de UAL vaut  "<<ual->getBus_entrant()[1]->getValeur()<<std::endl;
 	ual->setSignal(3);															//On place le bpon code alufs
 	ual->fonction(ual->getBus_entrant()[1]->getValeur(),ual->getBus_entrant()[0]->getValeur());//On réalise l'opération "entreb+1"
 	ual->getBus_sortant()[0]->setValeur(ual->getValeur());						//On place le résultat dans le bus sortant de l'ual
-	std::cout<<"La valeur dans le bus de sortie de UAL vaut  "<<ual->getBus_sortant()[0]->getValeur()<<std::endl;
 	r->setValeur(ual->getBus_sortant()[0]->getValeur());						//On place finalement la valeur du bus sortant de l'ual dans r
 
 
@@ -555,6 +535,8 @@ int Instruction::ldi(short int addr, Registre* ACC, Registre* r , Registre* IR, 
 }
 int Instruction::sti(short int addr, Registre* ACC, Registre* r , Registre* IR, Multiplexeur* muxA, Multiplexeur* muxB, Multiplexeur* muxC, Memoire* mem, UAL* ual, Porte* p){//Instruction OK
 
+	/*Reset de tous les signaux*/
+	resetSignaux();
 	/*Activation des signaux*/
 	r->setSignal(1);
 	mem->setSignal(1);
@@ -597,6 +579,8 @@ int Instruction::sti(short int addr, Registre* ACC, Registre* r , Registre* IR, 
 
 int Instruction::xpc(short int addr, Registre* ACC,Registre* pc, Porte* p , Registre* IR, Multiplexeur* muxA, Multiplexeur* muxB, Multiplexeur* muxC ,Memoire* mem, UAL* ual){//Instruction ok
 
+	/*Reset de tous les signaux*/
+	resetSignaux();
 	/*Activation des signaux*/
 	p->setSignal(1);
 	pc->setSignal(1);
@@ -621,19 +605,13 @@ int Instruction::xpc(short int addr, Registre* ACC,Registre* pc, Porte* p , Regi
 	muxB->setSignal(1);
 	muxB->fonction();																//On re aiguille le multiplexeur muxB sur sa 2ème entree
 	mem->getBus_sortant()[0]->setValeur(mem->getValeurEmplacementMemoire(addr));	//On place la valeur contenue dans la memoire à l'adresse addr dans son bus sortant
-	std::cout<<"La valeur dans le bus de sortie de la memoire vaut "<<mem->getBus_sortant()[0]->getValeur()<<std::endl;
 	ual->getBus_entrant()[0]->setValeur(mem->getBus_sortant()[0]->getValeur());		//On place dans le 1er bus entrant de ual la valeur contenue dans le bus sortant de la memoire
-	std::cout<<"La valeur dans le 1er bus entrant de UAL vaut  "<<ual->getBus_entrant()[0]->getValeur()<<std::endl;
 	ACC->getBus_sortant()[0]->setValeur(ACC->getValeur());							//On place dans le bus sortant de ACC la valeur contenue dans ACC
-	std::cout<<"La valeur dans le bus de sortie de ACC vaut "<<ACC->getBus_sortant()[0]->getValeur()<<std::endl;
 	ual->getBus_entrant()[1]->setValeur(ACC->getBus_sortant()[0]->getValeur());		//On place la valeur contenue dans le bus sortant de ACC dans le 2ème bus entrant de l'ual
-	std::cout<<"La valeur dans le 2eme bus entrant de UAL vaut  "<<ual->getBus_entrant()[1]->getValeur()<<std::endl;
 	ual->setSignal(0);																			//On place le bon code "aluf"
 	ual->fonction(ual->getBus_entrant()[0]->getValeur(),ual->getBus_entrant()[1]->getValeur());	//On fait correspondre la sortie avec l'entree B
 	ual->getBus_sortant()[0]->setValeur(ual->getValeur());										//On place le résultat dans le bus sortant de l'ual
-	std::cout<<"La valeur dans le bus sortant de UAL vaut  "<<ual->getBus_sortant()[0]->getValeur()<<std::endl;
 	pc->getBus_entrant()[0]->setValeur(ual->getBus_sortant()[0]->getValeur());					//On place dans le bus entrant de pc la valeur du bus sortant de ual
-	std::cout<<"La valeur dans le bus entrant de PC vaut  "<<pc->getBus_entrant()[0]->getValeur()<<std::endl;
 	pc->setValeur(pc->getBus_entrant()[0]->getValeur());										//On place dans pc la valeur contenue dans son bus entrant
 
 			//2ème phase
@@ -647,5 +625,9 @@ int Instruction::xpc(short int addr, Registre* ACC,Registre* pc, Porte* p , Regi
 	return 1;
 }
 
+void Instruction::resetSignaux(void){
+		for(unsigned int i=0;i< mip->getComposant().size();i++){					//On parcourt tous les composants et on met leur signal à 0
+		mip->getComposant()[i]->setSignal(0);
+	}
 
-
+}

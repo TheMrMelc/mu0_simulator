@@ -30,15 +30,15 @@ public:
 	Memoire(std::vector<short int> e_m, std::vector<Bus*> bus_e,std::vector<Bus*>bus_s);
 	virtual ~Memoire(void);
 
-	//ajout et suppressio des bus entrants
+	/*ajout et suppression des bus entrants*/
 	void addBusEntrant(Bus*);
     void supprBusEntrant(Bus*);
 
-    //ajout et suppression des bus sortants
+    /*ajout et suppression des bus sortants*/
     void addBusSortant(Bus*);
     void supprBusSortant(Bus*);
 
-    //Accès aux attributs
+    /*Accès aux attributs*/
     std::vector<short int> getEmplacement_memoire(void){ return emplacement_memoire;}
     short int getValeurEmplacementMemoire(short int addr){ return emplacement_memoire[addr];}
     void setValeurEmplacementMemoire(short int addr, short int val){emplacement_memoire[addr]=val;}
@@ -48,4 +48,4 @@ public:
     void setSignal(short int a){signal=a;}
 };
 
-#endif /* MEMOIRE_H_ */
+#endif

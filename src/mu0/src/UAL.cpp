@@ -2,7 +2,9 @@
 //Date : 8/04/2015
 
 //fichier UAL.cpp
+
 #define SHORT_INT_BITS 16
+
 #include "../include/UAL.h"
 
 UAL::UAL(std::string nc,int _nbEntree, int _nbSortie,std::string ns, short int _signal, short int _valeur, bool _actif):
@@ -50,7 +52,7 @@ short int UAL::fonction(short int entreA, short int entreB){
 	}
 	// sortie = rotation gauche de A nB fois
 	if (sig == 7){
-			setValeur((entreA << 1) | (entreA >> (16 - 1)));
+			setValeur( (entreA << 1) | (entreA >> (SHORT_INT_BITS- 1)) );  /*Ne marche pas encore*/
 	}
 	return getValeur();
 

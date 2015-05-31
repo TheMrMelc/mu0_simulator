@@ -18,6 +18,6 @@ Bus::Bus(short int _taille, short int _valeur, bool _actif) :
 
 
 Bus::~Bus() {
-	// TODO Auto-generated destructor stub
+
 }
 

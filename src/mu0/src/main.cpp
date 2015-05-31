@@ -12,13 +12,19 @@
 #include <iostream>
 
 
-
 int main(void){
 	
-	///////initialisation du microP mu0///////////
+	/***Initialisation du microP mu0***/
 	std::vector<Composant*> composants;
 	Mu0* mu0 = new Mu0(composants);
-	short int a = 15;
+
+	/***Zone de déclaration des instructions***/
+
+	short int a = 15;							//Par la suite, a est utilisé comme adresse pour la memoire : on fera des accès sur la 15 eme case de la memoire
+	mu0->findComposant("ACC")->setValeur(0x2);	//On initialise le registre ACC avec une valeur quelconque
+	mu0->findComposant("IR")->setValeur(0x10);	//On initialise le registre IR avec une adresse quelconque
+
+
 	/*mu0->getInstruction()->lda(
 			a,
 			(Registre*)mu0->findComposant("ACC"),
@@ -28,22 +34,15 @@ int main(void){
 			mu0->getMemoire()
 			);*/
 
-	mu0->findComposant("ACC")->setValeur(1);
-	mu0->findComposant("IR")->setValeur(10);
-
-	//std::cout <<"La valeur de ACC avant le STO est de " << mu0->findComposant("ACC")->getValeur() << std::endl;
-
-	/*mu0->getInstruction()->sto(10,
+	/*std::cout <<"la 15eme case memoire vaut " << mu0->getMemoire()->getValeurEmplacementMemoire(a) << std::endl;*/
+	/*mu0->getInstruction()->sto(a,
 			(Registre*)mu0->findComposant("ACC"),
 			(Registre*)mu0->findComposant("IR"),
 			(Multiplexeur*)mu0->findComposant("muxA"),
 			mu0->getMemoire(),
 			(Porte*)mu0->findComposant("Porte"));
 
-	/*std::cout <<"La valeur de ACC APRESl le STO est de " << mu0->findComposant("ACC")->getValeur() << std::endl;
-	std::cout <<"la 15eme case memoire vaut " << mu0->getMemoire()->getValeurEmplacementMemoire(a) << std::endl;
-	std::cout <<"la 10eme case memoire vaut " << mu0->getMemoire()->getValeurEmplacementMemoire(10) << std::endl;*/
-
+	std::cout <<"la 15eme case memoire vaut " << mu0->getMemoire()->getValeurEmplacementMemoire(a) << std::endl;*/ //Permet de bien voir le changement de valeur dans la memoire
 
 	/*mu0->getInstruction()->add(
 			a,
@@ -67,7 +66,6 @@ int main(void){
 				(UAL*)mu0->findComposant("UAL")
 				);*/
 
-	//(short int addr,Registre* ACC, Registre* pc , Registre* IR, Multiplexeur* muxA, Multiplexeur* muxB, Multiplexeur* muxC, Memoire* mem, UAL* ual ){
 	/*mu0->getInstruction()->jmp(
 					a,
 					(Registre*)mu0->findComposant("ACC"),
@@ -92,9 +90,6 @@ int main(void){
 						(UAL*)mu0->findComposant("UAL")
 						);*/
 
-	mu0->getMemoire()->setValeurEmplacementMemoire(a,3);
-	std::cout <<"la 15eme case memoire vaut " << mu0->getMemoire()->getValeurEmplacementMemoire(a) << std::endl;
-	std::cout <<"La valeur de ACC avant le STO est de " << mu0->findComposant("ACC")->getValeur() << std::endl;
 
 	/*->getInstruction()->jge(
 							a,
@@ -153,6 +148,7 @@ int main(void){
 								(UAL*)mu0->findComposant("UAL")
 								);*/
 
+
 	/*mu0->getInstruction()->ldr(
 								a,
 								(Registre*)mu0->findComposant("ACC"),
@@ -164,6 +160,8 @@ int main(void){
 								mu0->getMemoire(),
 								(UAL*)mu0->findComposant("UAL")
 								);*/
+
+
 	/*mu0->getInstruction()->ldi(
 								a,
 								(Registre*)mu0->findComposant("ACC"),
@@ -176,7 +174,10 @@ int main(void){
 								(UAL*)mu0->findComposant("UAL")
 								);*/
 
-	mu0->findComposant("R")->setValeur(13);
+
+	//mu0->findComposant("R")->setValeur(13);
+	/*std::cout <<"la 15eme case memoire vaut " << mu0->getMemoire()->getValeurEmplacementMemoire(a) << std::endl;*/
+
 	/*mu0->getInstruction()->sti(
 								a,
 								(Registre*)mu0->findComposant("ACC"),
@@ -189,8 +190,8 @@ int main(void){
 								(UAL*)mu0->findComposant("UAL"),
 								(Porte*)mu0->findComposant("Porte")
 								);*/
-	std::cout <<"La valeur de ACC avant xpc est " << mu0->findComposant("ACC")->getValeur() << std::endl;
-	std::cout <<"La valeur de PC avant xpc est " << mu0->findComposant("PC")->getValeur() << std::endl;
+	/*std::cout <<"la 15eme case memoire vaut " << mu0->getMemoire()->getValeurEmplacementMemoire(a) << std::endl;*/ // Permet de bien voir les changements dans la memoire
+
 
 	/*mu0->getInstruction()->xpc(
 								a,
@@ -206,10 +207,10 @@ int main(void){
 								);*/
 
 
-	///////initialistation de l'interface graphique////////
-	InterfaceGraphique* inter = new InterfaceGraphique(mu0);
-	//lancement
-	inter->execute(mu0);
+	/*****Initialistation de l'interface graphique*****/
+	//InterfaceGraphique* inter = new InterfaceGraphique(mu0);
+	/*Lancement*/
+	//inter->execute(mu0);
 
 
 	return 0;

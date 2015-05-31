@@ -1,28 +1,7 @@
 //author : Ma�lis
 //Date : 8/04/2015
 
-//fichier UAL.h
 
-//r�sum� de la classe m�re (composant):
-
-// attributs :
-//		nbEntree
-//		nbSortie
-//		signal
-//		valeur
-//		actif
-
-//m�thodes :
-//		activer
-//		desactiver
-//		fonction
-
-
-// r�sum� de la classe ual :
-
-//attributs
-// m�thodes
-// surcharche de fonction
 
 #ifndef UAL_H
 #define UAL_H
@@ -33,19 +12,15 @@
 class UAL : public Composant{
 private:
 public:
-	///////////////////////////////////// attributs /////////////////////////////////////
-	///////////////////////////////////// constructeurs /////////////////////////////////////
+
+	/*Constructeurs*/
 	UAL(std::string,int,int,std::string, short int, short int, bool);
 	UAL(std::string,int,int,std::string, short int, short int, bool, Bus*, Bus*);
 	UAL(std::string,int,int,std::string, short int, short int, bool, std::vector<Bus*>, std::vector<Bus*>);
-	///////////////////////////////////// destructeurs /////////////////////////////////////
+	/*Destructeur*/
 	virtual ~UAL(void){};
-	///////////////////////////////////// methodes /////////////////////////////////////////
+	/*Methode*/
 	short int fonction(short int, short int);
-	/////////////////////////////////////// Bus //////////////////////////////////////////
-	///////////////////////////////////// get ////////////////////////////////////////
-	///////////////////////////////////// set ////////////////////////////////////////
-
 
 };
 

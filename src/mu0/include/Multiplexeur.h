@@ -17,10 +17,10 @@ class Multiplexeur : public Composant {
 
 public:
 
-	std::vector <int> entree; // Pour pouvoir gérer les différentes entrées du multiplexeur
+	std::vector <int> entree; //Pour pouvoir gérer les différentes entrées du multiplexeur
 
 public:
-	//Constructeur et Destructeur
+	/*Constructeur et Destructeur*/
 
 	virtual ~Multiplexeur();
 
@@ -30,10 +30,8 @@ public:
 	void setValeur(short int v){valeur = v;}
 	short int getValeur(void){return valeur;}
 
-
-
-	//Méthodes//
-	void fonction(void);		//Prototype à revoir (Voir mes commentaires dans Multiplexeur.cpp) Nouvelle proposition ->
+	/*Methode*/
+	void fonction(void);
 };
 
 #endif

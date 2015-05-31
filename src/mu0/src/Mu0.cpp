@@ -13,7 +13,6 @@
 using namespace std;
 
 #include "Mu0.h"
-//#include "Instruction.h"
 
 static int __lda(short int addr, Mu0 *mu0){
 	int retour = mu0->getInstruction()->lda(
@@ -401,7 +400,7 @@ Mu0::Mu0(std::vector<Composant*> cMu0) : Microprocesseur(cMu0) {
 			Bus* bus_R_muxA = new Bus(12,0, false);
 			Bus* bus_R1_muxA = new Bus(12,0, false);
 
-			Bus* bus_muxB_ual = new Bus(6, 0, false); 	 //1er bus de UAL
+			Bus* bus_muxB_ual = new Bus(6, 0, false);
 			Bus* bus_ACC_porte = new Bus(16, 0, false);
 
 			Bus* bus_ual_R = new Bus(16, 0, false);
@@ -413,7 +412,7 @@ Mu0::Mu0(std::vector<Composant*> cMu0) : Microprocesseur(cMu0) {
 			Bus* bus_muxA_muxB = new Bus(12, 0, false);
 			Bus* bus_muxA_muxC= new Bus(12, 0, false);
 
-			Bus* bus_ACC_ual = new Bus(16, 0, false);	//2eme bus de ual
+			Bus* bus_ACC_ual = new Bus(16, 0, false);
 
 			Bus* bus_muxC_ACC = new Bus(16, 0, false) ;
 
@@ -472,8 +471,8 @@ Mu0::Mu0(std::vector<Composant*> cMu0) : Microprocesseur(cMu0) {
 			muxA->addBusEntrant(bus_R_muxA);
 			muxA->addBusEntrant(bus_R1_muxA);
 
-			ual->addBusEntrant(bus_muxB_ual);		//1er bus de ual
-			ual->addBusEntrant(bus_ACC_ual);		//2ème bus de ual
+			ual->addBusEntrant(bus_muxB_ual);
+			ual->addBusEntrant(bus_ACC_ual);
 
 			porte->addBusEntrant(bus_ACC_porte);
 
@@ -531,13 +530,7 @@ void Mu0::decodeExecute(void){
 	}
 
 
-	/*cout << "Donner une instruction (exemple : LDA addr)" << endl;
-	string instruction;
-	cin >> instruction;*/
-
-
-
-	//////////////////////////////////////////////////////////////////////////////////////////////////////////////// coupe de mon instruction
+/*********************Coupe de mon instruction***********************/
 
 
 	morceau = strtok_r (instruction," ", &tok);

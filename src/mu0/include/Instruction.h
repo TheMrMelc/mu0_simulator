@@ -15,7 +15,7 @@
 #include "Memoire.h"
 #include "Microprocesseur.h"
 
-class Microprocesseur;		//Déclaration avancée à la place de 'include "Microprocesseur.h"' pour éviter l'erreur "was not declared in this scope"
+class Microprocesseur;
 
 
 class Instruction {
@@ -24,12 +24,13 @@ private :
 	Microprocesseur* mip;	//Association avec Microprocesseur
 
 public :
+
+	/*Constructeur et Destructeur*/
 	Instruction(Microprocesseur* mu0);
-	//virtual
 	~Instruction();
 
 
-	/*M�thodes*/		//Liste des instructions du Mu0 utilis�es par le microprocesseur
+	/*Methode*/
 
 	int lda(short int addr, Registre* acc , Registre* IR, Multiplexeur* muxA, Multiplexeur* muxB, Memoire* mem);
 
@@ -63,6 +64,7 @@ public :
 
 	int xpc(short int addr, Registre* ACC,Registre* pc, Porte* p , Registre* IR, Multiplexeur* muxA, Multiplexeur* muxB, Multiplexeur* muxC ,Memoire* mem, UAL* ual);
 
+	void resetSignaux(void);
 
 };
 
